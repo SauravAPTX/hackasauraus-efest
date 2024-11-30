@@ -1,43 +1,80 @@
-const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
+const express = require("express");
+const http = require("http");
+const socketIo = require("socket.io");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = socketIo(server);
 
-// Serve static files (e.g., for a client app)
-app.use(express.static('public'));
+let usersQueue = [];
 
-// Handle WebRTC signaling
-io.on('connection', (socket) => {
-    console.log('A user connected:', socket.id);
+io.on("connection", (socket) => {
+  console.log("A user connected");
 
-    // Forward SDP offers and answers
-    socket.on('offer', (data) => {
-        console.log('Offer received:', data);
-        socket.to(data.to).emit('offer', { from: socket.id, sdp: data.sdp });
-    });
+  // Handle starting a connection and pairing user based on filter
+  socket.on("start-connection", ({ filter }) => {
+    console.log(`User selected filter: ${filter || "None"}`);
 
-    socket.on('answer', (data) => {
-        console.log('Answer received:', data);
-        socket.to(data.to).emit('answer', { from: socket.id, sdp: data.sdp });
-    });
+    // If no filter is selected, perform random matching
+    if (!filter) {
+      pairRandomUser(socket);
+    } else {
+      pairUserByFilter(socket, filter);
+    }
+  });
 
-    // Forward ICE candidates
-    socket.on('ice-candidate', (data) => {
-        console.log('ICE candidate received:', data);
-        socket.to(data.to).emit('ice-candidate', { from: socket.id, candidate: data.candidate });
-    });
+  // Function to pair a user randomly
+  const pairRandomUser = (socket) => {
+    const randomUser = usersQueue.find(
+      (user) => user.socketId !== socket.id
+    );
 
-    // Notify when a user disconnects
-    socket.on('disconnect', () => {
-        console.log('A user disconnected:', socket.id);
-    });
+    if (randomUser) {
+      socket.emit("match-found", randomUser);
+      io.to(randomUser.socketId).emit("match-found", {
+        name: "User 2",
+        age: 30,
+        interest: "Music",
+      });
+
+      // Remove both users from the queue
+      usersQueue = usersQueue.filter((user) => user.socketId !== socket.id && user.socketId !== randomUser.socketId);
+    } else {
+      usersQueue.push({ socketId: socket.id, filter: null });
+      socket.emit("no-users-in-queue");
+    }
+  };
+
+  // Function to pair users based on filter
+  const pairUserByFilter = (socket, filter) => {
+    const matchingUser = usersQueue.find(
+      (user) => user.filter === filter && user.socketId !== socket.id
+    );
+
+    if (matchingUser) {
+      socket.emit("match-found", matchingUser);
+      io.to(matchingUser.socketId).emit("match-found", {
+        name: "User 2",
+        age: 30,
+        interest: "Music",
+      });
+
+      // Remove both users from the queue
+      usersQueue = usersQueue.filter((user) => user.socketId !== socket.id && user.socketId !== matchingUser.socketId);
+    } else {
+      usersQueue.push({ socketId: socket.id, filter });
+      socket.emit("no-users-in-queue");
+    }
+  };
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected");
+    // Remove disconnected user from the queue
+    usersQueue = usersQueue.filter((user) => user.socketId !== socket.id);
+  });
 });
 
-// Start the server
-const PORT = 3000;
-server.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server is running at http://0.0.0.0:${PORT}`);
+server.listen(3000, "0.0.0.0", () => {
+    console.log("Server is running on port 3000");
 });
+
