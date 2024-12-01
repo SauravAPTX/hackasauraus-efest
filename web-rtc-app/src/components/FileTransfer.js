@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FileText, FileUp, FileDown } from 'lucide-react';
+import "./filetransfer.css"
 
 const FileTransfer = ({ fileTransfers, sendFile }) => {
     const [selectedFile, setSelectedFile] = useState(null);

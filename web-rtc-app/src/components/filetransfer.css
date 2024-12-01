@@ -1,0 +1,118 @@
+.file-transfer-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.file-upload {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.file-select-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 1px solid #007bff;
+    border-radius: 8px;
+    background-color: #e7f1ff;
+    color: #007bff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.file-select-btn:hover {
+    background-color: #d0e6ff;
+    transform: scale(1.05);
+}
+
+.file-send-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.file-send-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.file-transfers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.file-transfer-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.file-info span:nth-child(2) {
+    font-weight: 700;
+    color: #555;
+}
+
+.file-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.progress-bar {
+    flex-grow: 1;
+    height: 6px;
+    border-radius: 4px;
+    background-color: #007bff;
+    transition: width 0.3s ease;
+}
+
+.file-download-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 1px solid #28a745;
+    border-radius: 8px;
+    background-color: #e9f7ef;
+    color: #28a745;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.file-download-btn:hover {
+    background-color: #d4edda;
+    transform: scale(1.05);
+}

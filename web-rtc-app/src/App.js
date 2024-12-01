@@ -1,6 +1,7 @@
 import React from 'react';
 import WebRTC from './components/WebRTC';
-import { Github, Twitter, Linkedin } from 'lucide-react';
+import { Github, Twitter, Linkedin, Camera, Mic, VideoOff } from 'lucide-react';
+import './App.css';
 
 function App() {
   return (
@@ -19,14 +20,31 @@ function App() {
           </a>
         </div>
       </header>
-      
+
       <main className="App-main">
         <WebRTC />
+        <Controls />
       </main>
-      
+
       <footer className="App-footer">
         <p>Made with ❤️ by Hackasauraus</p>
       </footer>
+    </div>
+  );
+}
+
+function Controls() {
+  return (
+    <div className="controls">
+      <button className="overlay-btn">
+        <Camera />
+      </button>
+      <button className="overlay-btn">
+        <Mic />
+      </button>
+      <button className="overlay-btn">
+        <VideoOff />
+      </button>
     </div>
   );
 }
